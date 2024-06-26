@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mumble.net", "Mumble.net\Mumble.net.csproj", "{89367F00-AED4-452A-B833-1D69C8F1A606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mumble.net", "Mumble.net\Mumble.net.csproj", "{89367F00-AED4-452A-B833-1D69C8F1A606}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF97A400-C4F5-4ED8-9024-8309421E7EC8}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
