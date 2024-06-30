@@ -7,4 +7,50 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.27.2" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.27.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="Protobuf" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' And '$(SkipProtobuf)' != 'True' ">
+    <Exec ConsoleToMSBuild="true" 
+          ContinueOnError="false" 
+          WorkingDirectory="$(ProjectDir)" 
+          Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" 
+          Command="$(protoc_windows32) -I=$(ProjectDir)\Protobuf --csharp_out=$(ProjectDir)\Protobuf $(ProjectDir)\Protobuf\*.proto">
+      <Output TaskParameter="ExitCode" PropertyName="ProtobufExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProtobufOutput" />
+    </Exec>
+    <Exec ConsoleToMSBuild="true" 
+          ContinueOnError="false" 
+          WorkingDirectory="$(ProjectDir)" 
+          Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" 
+          Command="$(protoc_windows64) -I=$(ProjectDir)\Protobuf --csharp_out=$(ProjectDir)\Protobuf $(ProjectDir)\Protobuf\*.proto">
+      <Output TaskParameter="ExitCode" PropertyName="ProtobufExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProtobufOutput" />
+    </Exec>
+    <Exec ConsoleToMSBuild="true" 
+          ContinueOnError="false" 
+          WorkingDirectory="$(ProjectDir)" 
+          Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" 
+          Command="$(protoc_linux32) -I=$(ProjectDir)\Protobuf --csharp_out=$(ProjectDir)\Protobuf $(ProjectDir)\Protobuf\*.proto">
+      <Output TaskParameter="ExitCode" PropertyName="ProtobufExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProtobufOutput" />
+    </Exec>
+    <Exec ConsoleToMSBuild="true" 
+          ContinueOnError="false" 
+          WorkingDirectory="$(ProjectDir)" 
+          Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" 
+          Command="$(protoc_linux64) -I=$(ProjectDir)\Protobuf --csharp_out=$(ProjectDir)\Protobuf $(ProjectDir)\Protobuf\*.proto">
+      <Output TaskParameter="ExitCode" PropertyName="ProtobufExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProtobufOutput" />
+    </Exec>
+
+    <Message Text="$(ProtobufOutput)" Condition="'$(ProtobufExitCode)' == '0'" Importance="low" />
+    <Error Text="$(ProtobufOutput)" Condition="'$(ProtobufExitCode)' != '0'" />
+  </Target>
+
 </Project>
